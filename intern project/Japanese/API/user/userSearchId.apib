@@ -1,0 +1,26 @@
+# Group user
+
+## userSearchId [/v1/user/:id]
+
+### userSearchId [GET]
+
+#### 処理概要
+
+* `user.id` = `Parameters.id`となる`user`レコードを1件返却 
+* `user`テーブルに該当するレコードが存在しない、若しくは論理削除された（`user.deletedAt` != NULL）場合、404エラーを返却
+* 指定された`user.id`に紐づく`section.id`の`section.deletedAt` = NULLの場合、404エラーを返却
+* ログインユーザーの`user.userFlag` = 1 AND ログインユーザーの`user.id` != `Parameters.id`、403エラーを返却
+* `sectionName`は`section.id` = `user.sectionId` AND `section.deletedAt` = NULLとなるレコードの`section.name`を返却
+
++ Parameters
+    + id: `1` (string, required) - ID
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + id: `1` (string, required) - ID
+        + email: `email@example.com` (string, required) - Email
+        + name: `ABC` (string, required) - User Name
+        + sectionId: `2` (string, required) - Section ID
+        + sectionName: `Developer` (string, optional) - Section Name
+        + joiningDate: `2021-01-01` (string, required) - Joining Date
+        + userFlag: `0` (string, required) - User Flag

@@ -1,0 +1,53 @@
+
+# Group common
+
+## common [/v1/]
+
+### common [GET]
+
+#### Khái quát xử lý
+
+* Chỉ có API login, API refreshToken là có thể gọi mà không cần chứng thực
+* Quyền hạn truy cập API được ghi ở từng thiết kế API. Dựa trên Payload của accesssToken để phán đoán quyền hạn login user
+* Check validate đối với request parameter như sau:
+    * Check required: [requiredError]
+    * Check data-type số: [datatypeError], truyền {1} = `数値`
+    * Check format date: [formatError], truyền {1} = `日付`
+    * Check max-length theo định nghĩa DB: [maxlengthError]
+        * Đối với hạng mục số thì chỉ check trong trường hợp không có list giá trị, và không phải là khóa chính/ khóa ngoại
+    * Check giá trị date: [formatError], truyền {1} = `日付`
+    * Check giá trị hạng mục có list giá trị: [valueError]
+    * Check tồn tại giá trị tương ứng trong DB có deletedAt = NULL đối với request parameter là id: [notExistError]
+* API dùng phương thức GET thì chỉ check required + những check khác có định nghĩa trong thiết kế API
+* Lỗi 400: Trả trong trường hợp lỗi validate hoặc lỗi có định nghĩa trong thiết kế API
+* Lỗi 401: Trả trong trường hợp lỗi chứng thực khi token chứng thực sai, hết hạn, .v.v..
+* Lỗi 403: Trả trong trường hợp truy cập vào URL không có quyền truy cập
+* Lỗi 404: Trả trong trường hợp truy cập vào URL không được chuẩn bị sẵn
+* Lỗi 500: Trả trong trường hợp xảy ra lỗi nội bộ server
+* Về `offset`: Trường hợp có gửi `offset`, trả từ record thứ (`offset`-1)*`limit`+1
+  Ví dụ: Gửi `offset` = 3, `limit` = 10, thì trả về từ record thứ (3-1)*10+1=21
+
++ Response 400 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `xxxxxxx` (string, required) - Nội dung message lỗi
+
++ Response 401 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `認証エラー` (string, required)
+
++ Response 403 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `権限がないURLです` (string, required)
+
++ Response 404 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `Not Found URL` (string, required)
+
++ Response 500 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `ERROR` (string, required)

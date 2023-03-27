@@ -1,0 +1,18 @@
+
+## userDelete [/v1/user/:id]
+
+### userDelete [DELETE]
+
+#### 処理概要
+
+* `user.id` = `Parameters.id`となる`user`レコードを論理削除（`user.deletedAt` = システム日時(UTC)で更新）
+* ログインユーザーの`user.userFlag` != 0の場合、403エラーを返却
+* `user`テーブルに該当するレコードが存在しない、若しくは論理削除された（`user.deletedAt` != NULL）場合、404エラーを返却
+* 指定された`user.id`に紐づく`section.id`の`section.deletedAt` = NULLの場合、404エラーを返却
+* 削除としたレコードの`user.id` = ログインユーザーの`user.id`の場合、エラーを返却 `deleteLoginAccountError`
+
++ Parameters
+    + id: `1` (string, required) - ID
+
++ Response 204
+    + Attributes

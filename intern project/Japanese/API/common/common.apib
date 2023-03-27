@@ -1,0 +1,53 @@
+
+# Group common
+
+## common [/v1/]
+
+### common [GET]
+
+#### 処理概要
+
+* ログインせずに叩けるAPIはloginAPI、refreshTokenAPIのみとする
+* 各APIへのアクセス権限は各設計に記載。accessTokenのPayload情報を元にしてログインユーザーの権限を判断
+* 下記通りにリクエストパラメータに対してバリデーションチェックを行う：
+    * 必須チェック：[requiredError]
+    * 数値のデータ型チェック：[datatypeError]、{1} = `数値`で渡す
+    * 日付のフォーマットチェック：[formatError]、{1} = `日付`で渡す
+    * DB定義書通りに最大文字数チェック：[maxlengthError]
+        * 数値項目の場合、リスト値がない かつ 主キー・外部キーではない場合のみチェックを行う
+    * 日付の値チェック：[formatError]、{1} = `日付`で渡す
+    * リスト値がある項目の値チェック：[valueError]
+    * IDであるリクエストパラメータに対して、該当する値がDBに存在する かつ deletedAt = NULLかチェック：[notExistError]
+* GETの場合は、必須チェックとAPI設計に定義されるチェックのみ行う
+* 400エラー：バリデーションエラー、若しくはAPI設計に定義されるエラー等発生した場合に返却
+* 401エラー：トークンが正しくない、有効期限が切れた等の認証エラーが発生した場合に返却
+* 403エラー：アクセス権限がないURLにアクセスした場合に返却
+* 404エラー：用意されていないURLにアクセスした場合に返却
+* 500エラー：内部サーバエラーが発生した場合に返却
+* `offset`について、`offset`が送信された場合、(`offset`-1)*`limit`+1件目から返却
+  例：`offset` = 3、`limit` = 10で送信した場合、(3-1)*10+1=21件目から返却
+
++ Response 400 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `xxxxxxx` (string, required) - エラーメッセージ内容
+
++ Response 401 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `認証エラー` (string, required)
+
++ Response 403 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `権限がないURLです` (string, required)
+
++ Response 404 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `Not Found URL` (string, required)
+
++ Response 500 (application/json)
+    + Attributes (object)
+        + errors (array, required, fixed-type)
+            + `ERROR` (string, required)

@@ -1,0 +1,28 @@
+
+## userUpdate [/v1/user/:id]
+
+### userUpdate [PUT]
+
+#### Khái quát xử lý
+
+* UPDATE record `user` có `user.id` = `Parameters.id`
+* Trường hợp không tồn tại record tương ứng trong bảng `user`, hoặc record đó đã bị xóa logic (`user.deletedAt` != NULL), trả lỗi 404
+* Trường hợp `section.id` ràng buộc với `user.id` bị chỉ định có `section.deletedAt` = NULL thì trả lỗi 404
+* Trường hợp `user.userFlag` của login user = 1 AND `user.id` của login user != `Parameters.id`, trả lỗi 403
+* Trường hợp tồn tại record có `user.email` = `Parameters.email` AND `user.deletedAt` = NULL AND `user.id` != `Parameters.id`, trả lỗi `duplicateValueError`, truyền {0} = `Email`
+* Trường hợp không gửi `Parameters.password`, không update `user.password` 
+* Trường hợp gửi `Parameters.password` AND giá trị gửi = NULL, trả lỗi `requiredError`
+* Trường hợp gửi `Parameters.password` AND giá trị gửi != NULL, update `user.password` 
+
++ Parameters
+    + id: `1` (string, required) - ID
+    + email: `email@example.com` (string, required) - Email
+    + password: `passwordAbc` (string, optional) - Password
+    + name: `ABC` (string, required) - User Name
+    + sectionId: `2` (string, required) - Section ID
+    + joiningDate: `2021-01-01` (string, required) - Joining Date
+    + userFlag: `0` (string, required) - UserFlag
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + id: `1` (string, required) - ID

@@ -1,0 +1,38 @@
+# Group section
+
+## sectionSearch [/v1/section]
+
+### sectionSearch [GET]
+
+#### 処理概要
+
+* 結果をN件返却
+* 下記の項目でソートして返却
+    * `Parameters.sort` = 1の場合、`section.id`の昇順
+    * `Parameters.sort` = 2の場合、`section.name`の昇順
+* `Parameters.deleted`について
+    * 「0」の値のみ許容
+    * `Parameters.deleted` = 0で送信された場合、section.deletedAt = NULLのレコードのみ返却
+    * `Parameters.deleted`が送信されなかった場合、全てのレコードを返却
+* `leaderName`は`user.id` = `section.leaderId` AND `user.deletedAt` = NULLとなるレコードの`user.name`を返却 
+* ログインユーザーの`user.userFlag` != 0の場合、403エラーを返却
+
++ Parameters
+    + sort: `1` (string, required) - Sort
+    + deleted: `1` (string, optional) - Deleted
+    + limit: `20` (string, optional) - Limit
+    + offset: `2` (string, optional) - Offset
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + section: (array, optional, fixed-type)
+            + (object)
+                + id: `1` (string, required) - ID
+                + name: `Developer` (string, required) - Section Name
+                + remarks: `Abc...` (string, optional) - Remarks
+                + leaderId: `1` (string, required) - Leader ID
+                + leaderName: `David` (string, optional) - Leader Name
+                + floorNum: `8` (string, required) - Floor Number
+                + createdAt: `2021-01-10 00:00` (string, required) - Created At
+                + updatedAt: `2021-01-10 00:00` (string, required) - Updated At
+                + deletedAt: `2021-01-10 00:00` (string, optional) - Deleted At

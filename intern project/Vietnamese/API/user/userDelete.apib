@@ -1,0 +1,18 @@
+
+## userDelete [/v1/user/:id]
+
+### userDelete [DELETE]
+
+#### Khái quát xử lý
+
+* Xóa logic (lưu `user.deletedAt` = system datetime(UTC)) record `user` có `user.id` = `Parameter.id`
+* Trường hợp `user.userFlag` của login user != 0, trả lỗi 403
+* Trường hợp không tồn tại record tương ứng trong bảng `user`, hoặc record đó đã bị xóa logic (`user.deletedAt` != NULL), trả lỗi 404
+* Trường hợp `section.id` ràng buộc với `user.id` bị chỉ định có `section.deletedAt` = NULL thì trả lỗi 404
+* Trường hợp record định xóa có `user.id` = `user.id` của login user, trả lỗi `deleteLoginAccountError`
+
++ Parameters
+    + id: `1` (string, required) - ID
+
++ Response 204
+    + Attributes

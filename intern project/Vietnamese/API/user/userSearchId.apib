@@ -1,0 +1,26 @@
+# Group user
+
+## userSearchId [/v1/user/:id]
+
+### userSearchId [GET]
+
+#### Khái quát xử lý
+
+* Trả về 1 record `user` có `user.id` = `Parameters.id`
+* Trường hợp không tồn tại record tương ứng trong bảng `user`, hoặc record đó đã bị xóa logic (`user.deletedAt` != NULL), trả lỗi 404
+* Trường hợp `section.id` ràng buộc với `user.id` bị chỉ định có `section.deletedAt` = NULL thì trả lỗi 404
+* Trường hợp `user.userFlag` của login user = 1 AND `user.id` của login user != `Parameters.id`, trả lỗi 403
+* Hạng mục `sectionName` trả về `section.name` của record có `section.id` = `user.sectionId` AND `section.deletedAt` = NULL
+
++ Parameters
+    + id: `1` (string, required) - ID
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + id: `1` (string, required) - ID
+        + email: `email@example.com` (string, required) - Email
+        + name: `ABC` (string, required) - User Name
+        + sectionId: `2` (string, required) - Section ID
+        + sectionName: `Developer` (string, optional) - Section Name
+        + joiningDate: `2021-01-01` (string, required) - Joining Date
+        + userFlag: `0` (string, required) - User Flag

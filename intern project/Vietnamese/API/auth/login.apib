@@ -1,0 +1,44 @@
+# Group auth
+
+## login [/v1/auth/login]
+
+### login [POST]
+
+#### Khái quát xử lý
+
+* Trường hợp không tồn tại or tồn tại nhiều record thỏa điều kiện sau thì trả lỗi [loginFail]
+    * `user.email` = `Parameters.email`
+    * AND `user.password` đã mã hóa = `Parameters.password`
+    * AND `user.deletedAt` = NULL
+* Trường hợp không lỗi thì phát hành `accessToken` + `refreshToken`
+* Lưu `refreshToken` đã phát hành vào bảng `refreshToken`
+* Payload của `accessToken`:
+```js
+{
+    "id": user.id
+    "email": user.email
+    "name": user.name
+    "sectionId": user.sectionId
+    "sectionName": section.name (của record có `section.id` = `user.sectionId` AND `section.deletedAt` = NULL)
+    "userFlag": user.userFlag
+}
+```
+* Time-out của `accessToken`： 10 phút (tính kể từ `refreshToken.updatedAt`)
+* Các data khác ngoài token thì get từ bảng `user`
+* Hạng mục `sectionName` trả về `section.name` của record có `section.id` = `user.sectionId` AND `section.deletedAt` = NULL
+
++ Parameters
+    + email: `example@mail.com` (string, required) - Email
+    + password: `passwordAbc` (string, required) - Password
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + id: `10` (string, required) - ID
+        + email: `example@mail.com` (string, required) - Email
+        + name: `abcd...` (string, required) - User Name
+        + sectionId: `24` (string, required) - Section ID
+        + sectionName: `abcd...` (string, optional) - Section Name
+        + userFlag: `0` (string, required) - User Flag
+        + token: (object) - Thông tin token
+            + accessToken: `abcd...` (string, required) - Access Token
+            + refreshToken: `af7e035d-...` (string, required) - Refresh Token

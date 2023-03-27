@@ -1,0 +1,16 @@
+
+## logout [/v1/auth/logout]
+
+### logout [POST]
+
+#### 処理概要
+
+* `refreshToken.refreshToken` = `Parameters.refreshToken`となるレコードが存在しない場合、エラーを返却 `invalidToken`
+* `refreshToken.refreshToken` = `Parameters.refreshToken`となるレコードの`refreshToken.userId` != ログインユーザーの`user.id`、エラーを返却 `invalidToken`
+* `refreshToken.refreshToken` = `Parameters.refreshToken`となるレコードを物理削除
+
++ Parameters
+    + refreshToken: `af7e035d-...` (string, required) - Refresh Token
+
++ Response 204
+    + Attributes

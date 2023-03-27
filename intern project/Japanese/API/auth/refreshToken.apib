@@ -1,0 +1,21 @@
+
+## refreshToken [/v1/auth/refreshToken]
+
+### refreshToken [POST]
+
+#### 処理概要
+
+* `refreshToken.refreshToken` = `Parameters.refreshToken`となるレコードが存在しない場合、エラーを返却 `invalidToken`
+* `refreshToken.refreshToken` = `Parameters.refreshToken`となるレコードの`refreshToken.userId` != ログインユーザーの`user.id`、`invalidToken`を返却
+* `refreshToken`がタイムアウトされた（`refreshToken.updatedAt` + 3時間 < システム日時(UTC)）場合、エラーを返却 `invalidToken`
+* `refreshToken.refreshToken` = `Parameters.refreshToken`となるレコードの`refreshToken.userId`が`user`テーブルに存在しない、若しくは論理削除された（`user.deletedAt` != NULL）場合、エラーを返却 `invalidToken`
+* 受け取った`refreshToken`を元にして`accessToken`を更新し返却
+* `refreshToken.updatedAt` = システム日時(UTC)で更新
+* `accessToken`のpayload：loginAPIを参照
+
++ Parameters
+    + refreshToken: `af7e035d-...` (string, required) - Refresh Token
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + accessToken: `abcd...` (string, required) - Access Token

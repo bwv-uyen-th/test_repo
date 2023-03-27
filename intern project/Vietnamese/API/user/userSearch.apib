@@ -1,0 +1,33 @@
+# Group user
+
+## userSearch [/v1/user]
+
+### userSearch [GET]
+
+#### Khái quát xử lý
+
+* Trả về N record kết quả
+* Trả về theo thứ tự `user.name` ASC > `user.id` ASC
+* Không trả về các record có `user.deletedAt` != NULL
+* Không trả về các record không có `section` ràng buộc mà có `section.id` = `user.sectionId` AND `section.deletedAt` = NULL
+* Hạng mục `sectionName` trả về `section.name` của record có `section.id` = `user.sectionId` AND `section.deletedAt` = NULL
+
++ Parameters
+    + name: `ABC` (string, optional) (Search LIKE) - User Name
+    + userFlag: `1` (string, optional) - User Flag
+    + joiningDateFrom: `2021-01-01` (string, optional) - Joining Date From
+    + joiningDateTo: `2021-01-10` (string, optional) - Joining Date To
+    + limit: `20` (string, optional) - Limit
+    + offset: `2` (string, optional) - Offset
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + user: (array, optional, fixed-type)
+            + (object)
+                + id: `1` (string, required) - ID
+                + email: `email@example.com` (string, required) - Email
+                + name: `ABC` (string, required) - User Name
+                + sectionId: `2` (string, required) - Section ID
+                + sectionName: `Developer` (string, optional) - Section Name
+                + joiningDate: `2021-01-01` (string, required) - Joining Date
+                + userFlag: `0` (string, required) - User Flag

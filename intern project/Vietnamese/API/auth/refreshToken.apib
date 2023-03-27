@@ -1,0 +1,21 @@
+
+## refreshToken [/v1/auth/refreshToken]
+
+### refreshToken [POST]
+
+#### Khái quát xử lý
+
+* Trường hợp không tồn tại `refreshToken.refreshToken` = `Parameters.refreshToken`, trả lỗi `invalidToken`
+* Trường hợp `refreshToken.userId` (mà có `refreshToken.refreshToken` = `Parameters.refreshToken`) != `user.id` của login user, trả lỗi `invalidToken`
+* Trường hợp `refreshToken` đã bị time-out (`refreshToken.updatedAt` + 3 tiếng < system datetime (UTC)), trả lỗi `invalidToken`
+* Trường hợp `refreshToken.userId` (mà có `refreshToken.refreshToken` = `Parameters.refreshToken`) không tồn tại trong bảng `user`, hoặc record đó đã bị xóa logic (`user.deletedAt` != NULL), trả lỗi `invalidToken`
+* Dựa trên `refreshToken` nhận được để update `accessToken` rồi trả về
+* Update `refreshToken.updatedAt` = system datetime (UTC)
+* Payload của `accessToken`: Tham chiếu API login
+
++ Parameters
+    + refreshToken: `af7e035d-...` (string, required) - Refresh Token
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + accessToken: `abcd...` (string, required) - Access Token

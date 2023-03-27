@@ -1,0 +1,33 @@
+# Group user
+
+## userSearch [/v1/user]
+
+### userSearch [GET]
+
+#### 処理概要
+
+* 結果をN件返却
+* `user.name`の昇順 > `user.id`の昇順で返却
+* `user.deletedAt` != NULLは返却対象外
+* `section.id` = `user.sectionId` AND `section.deletedAt` = NULLとなる紐づく`section`が存在しないのは返却対象外
+* `sectionName`は`section.id` = `user.sectionId` AND `section.deletedAt` = NULLとなるレコードの`section.name`を返却
+
++ Parameters
+    + name: `ABC` (string, optional) (Search LIKE) - User Name
+    + userFlag: `1` (string, optional) - User Flag
+    + joiningDateFrom: `2021-01-01` (string, optional) - Joining Date From
+    + joiningDateTo: `2021-01-10` (string, optional) - Joining Date To
+    + limit: `20` (string, optional) - Limit
+    + offset: `2` (string, optional) - Offset
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + user: (array, optional, fixed-type)
+            + (object)
+                + id: `1` (string, required) - ID
+                + email: `email@example.com` (string, required) - Email
+                + name: `ABC` (string, required) - User Name
+                + sectionId: `2` (string, required) - Section ID
+                + sectionName: `Developer` (string, optional) - Section Name
+                + joiningDate: `2021-01-01` (string, required) - Joining Date
+                + userFlag: `0` (string, required) - User Flag

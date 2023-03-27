@@ -1,0 +1,22 @@
+
+## userCreate [/v1/user]
+
+### userCreate [POST]
+
+#### 処理概要
+
+* 受け取った情報で新規`user`を登録
+* ログインユーザーの`user.userFlag` != 0の場合、403エラーを返却
+* `user.email` = `Parameters.email` AND `user.deletedAt` = NULLとなるレコードが存在する場合、エラーを返却 `duplicateValueError`、{0} = `Email`で渡す
+
++ Parameters
+    + email: `email@example.com` (string, required) - Email
+    + password: `passwordAbc` (string, required) - Password
+    + name: `ABC` (string, required) - User Name
+    + sectionId: `2` (string, required) - Section ID
+    + joiningDate: `2021-01-01` (string, required) - Joining Date
+    + userFlag: `0` (string, required) - User Flag
+
++ Response 201 (application/json)
+    + Attributes (object)
+        + id: `1` (string, required) - ID

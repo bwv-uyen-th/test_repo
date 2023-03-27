@@ -1,0 +1,16 @@
+
+## logout [/v1/auth/logout]
+
+### logout [POST]
+
+#### Khái quát xử lý
+
+* Trường hợp không tồn tại `refreshToken.refreshToken` = `Parameters.refreshToken`, trả lỗi `invalidToken`
+* Trường hợp `refreshToken.userId` (mà có `refreshToken.refreshToken` = `Parameters.refreshToken`) != `user.id` của login user, trả lỗi `invalidToken`
+* Xóa vật lý record có `refreshToken.refreshToken` = `Parameters.refreshToken`
+
++ Parameters
+    + refreshToken: `af7e035d-...` (string, required) - Refresh Token
+
++ Response 204
+    + Attributes

@@ -1,0 +1,44 @@
+# Group auth
+
+## login [/v1/auth/login]
+
+### login [POST]
+
+#### 処理概要
+
+* 下記条件に合致するレコードが存在しない、若しくは複数存在する場合、エラーを返却　[loginFail]
+    * `user.email` = `Parameters.email`
+    * AND 暗号化された`user.password` = `Parameters.password`
+    * AND `user.deletedAt` = NULL
+* エラーがない場合、`accessToken` + `refreshToken`を発行
+* `refreshToken`テーブルに発行した`refreshToken`を格納 
+* `accessToken`のpayload：
+```js
+{
+    "id": user.id
+    "email": user.email
+    "name": user.name
+    "sectionId": user.sectionId
+    "sectionName": section.name（`section.id` = `user.sectionId` AND `section.deletedAt` = NULL）
+    "userFlag": user.userFlag
+}
+```
+* `accessToken`のタイムアウト：10分（`refreshToken.updatedAt`から）
+* トークン以外の情報は`user`テーブルから取得
+* `sectionName`は`section.id` = `user.sectionId` AND `section.deletedAt` = NULLとなるレコードの`section.name`を返却 
+
++ Parameters
+    + email: `example@mail.com` (string, required) - Email
+    + password: `passwordAbc` (string, required) - Password
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + id: `10` (string, required) - ID
+        + email: `example@mail.com` (string, required) - Email
+        + name: `abcd...` (string, required) - User Name
+        + sectionId: `24` (string, required) - Section ID
+        + sectionName: `abcd...` (string, optional) - Section Name
+        + userFlag: `0` (string, required) - User Flag
+        + token: (object) - トークン情報
+            + accessToken: `abcd...` (string, required) - Access Token
+            + refreshToken: `af7e035d-...` (string, required) - Refresh Token
