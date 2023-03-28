@@ -18,6 +18,7 @@
             * SESSION_SECRET
             * HASH_SECRET
             * REDIS_HOST
+			edit common
             * REDIS_PORT
 ### Trình duyệt
 Trên PC<br/>Windows (Hệ điều hành mới nhất): Google Chrome, Microsoft Edge (Tất cả trình duyệt ở version mới nhất)<br/>
