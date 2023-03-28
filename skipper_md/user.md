@@ -58,7 +58,7 @@
 ## Use API
 | No. | Name | Action | API name | Param | Content |
 | --- | ---- | ------ | -------- | ----- | ------- |
-| - | - | khi khởi động | userSearch | - | ・Chạy API [userSearch (API1)]<br/>Trường hợp failure<br/>　Dừng lại ở màn hình này, hiển thị message API trả về<br/>Trường hợp success<br/>　Phản ánh giá trị trả về vào các hạng mục trên màn hình<br/>　※Tham chiếu phần [Basic information] bên trên |
+| - | - | 起動時 | userSearch | - | ・Chạy API [userSearch (API1)]<br/>Trường hợp failure<br/>　Dừng lại ở màn hình này, hiển thị message API trả về<br/>Trường hợp success<br/>　Phản ánh giá trị trả về vào các hạng mục trên màn hình<br/>　※Tham chiếu phần [Basic information] bên trên |
 | - | - | 起動時 | organizationSearch | - | ・Chạy API [organizationSearch (API2)]<br/>Trường hợp failure<br/>　Dừng lại ở màn hình này, hiển thị message API trả về<br/>Trường hợp success<br/>　Phản ánh giá trị trả về vào các hạng mục trên màn hình<br/>　※Tham chiếu phần [Basic information] bên trên |
 | 1-2 | ユーザー一括登録 | Khi nhấn | fileImport | [file] = file đã chọn<br/>[type] = user | ・Chạy API [fileImport (API4)]<br/>Trường hợp failure<br/>　Dừng lại ở màn hình này, hiển thị message API trả về<br/>Trường hợp success<br/>　Hiển thị message [ec-00106] |
 | 6 | 検索 | Khi nhấn | userSearch | ※Tham chiếu phần [Basic information] bên trên | ・Chạy API [userSearch (API1)]<br/>Trường hợp failure<br/>　Dừng lại ở màn hình này, hiển thị message API trả về<br/>Trường hợp success<br/>　Phản ánh giá trị trả về vào các hạng mục trên màn hình<br/>　※Tham chiếu phần [Basic information] bên trên |
