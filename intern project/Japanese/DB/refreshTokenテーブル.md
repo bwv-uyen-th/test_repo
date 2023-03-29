@@ -6,7 +6,7 @@
 
 ### カラム情報
 
-| No. | 論理名 | 物理名 | データ型 | 桁数 | Not NULL | デフォルト |
+| No. | Tên logic | 物理名 | データ型 | 桁数 | Not NULL | デフォルト |
 | - | - | - | - | - | - | - |
 | 1 | ID | id | bigint | - | Yes | - |
 | 2 | User ID | userId | bigint | - | Yes | - |
