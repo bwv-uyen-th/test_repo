@@ -37,8 +37,6 @@
 | 9-1 | 管理職フラグ | 0 (システム管理者) | Không hiển thị với quyền hạn 1 (組織管理者), 2 (一般ユーザー) |
 | 9-2 | メール配信許可フラグ | 0 (システム管理者) | Không hiển thị với quyền hạn 1 (組織管理者), 2 (一般ユーザー) |
 
-useradd
-
 ## Trigger processing content
 
 | No. | Name | Action | Content |
