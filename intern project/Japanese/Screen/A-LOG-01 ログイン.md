@@ -10,7 +10,7 @@
 
 ## 項目一覧
 
-| No. | 項目名 | 更新/表示 | 部品種類 | 必須 | 文字数 | 入力制限 | デフォルト | 「login」APIのリクエスト |
+| No. | 項目名 | 更新/表示 | 部品種類 | 必須 | 文字数 | 入力制限 | Default | 「login」APIのリクエスト |
 | - | - | - | - | - | - | - | - | - |
 | 1 | Email | 更新 | text | Y | - | email | - | email |
 | 2 | Password | 更新 | password | Y | - | - | - | password |
