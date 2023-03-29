@@ -1,0 +1,89 @@
+
+
+# Group applicant
+
+## applicantCreate [/v1/applicant]
+
+### applicantCreate [POST]
+
+#### 処理概要
+
+hahaha
+
+* 受け取った情報で新規レコードをINSERTする <br>
+ <br>
+* [Parameters].[email] が [applicant].[email] AND [applicantTmp].[email] （ [status] = 3:成功 AND 9:失敗 は対象外） に存在している場合エラーを返却 <br>
+ 但し、[applicant].[cancelFlag] = 1:Yes のデータは対象外とする <br>
+[applicantEmailExistError] メッセージ
+<br>
+* [Parameters].[guarantorAddress] = 2:受講生と異なる の場合、下記項目を必須とする <br>
+ [guarantorZip],[guarantorPrefectural],[guarantorAddress1],[guarantorAddress2] <br>
+<br>
+* [Parameters].[courseStatus] = 2:通常申込受付中 AND [Parameters].[deliveryCourse] = 1 の場合、エラーを返却 <br>
+ [applicantCreateCourseError] メッセージ <br>
+<br>
+* [Parameters].[shipping] = 3:その他 の場合、下記項目を必須とする <br>
+ [shippingZip],[shippingPrefectural],[shippingAddress1],[shippingAddress2] <br>
+<br>
+* コースステータスエラーチェック処理 <br>
+ [Parameters].[courseId].[status] = 3:キャンセル待ち受付中 かつ [Parameters].[courseStatus] = 2:通常申込受付中 の場合、エラーを返却 <br>
+ [applicantCourseCancelChangeStatus] メッセージ <br>
+ [Parameters].[courseId].[status] = 1:申込停止 かつ [Parameters].[courseStatus] = 1:申込停止 OR 2:通常申込受付中 OR 3:キャンセル待ち受付中 の場合、エラーを返却 <br>
+ [applicantCourseStopChangeStatus] メッセージ <br>
+<br>
+* [Parameters] 情報を全てSQSに格納し、[action] = [applicantCreate] で登録を行う <br>
+ [applicantTmp] レコードを生成する <br>
+<br>
+
++ Parameters
+    + courseId: `1` (string,required) - コースid
+    + courseStatus: `1` (string,required) - コースステータス
+    + azbStudent: `1` (string,required) - 麻布受講生
+    + studentNo: `1` (string,optional) - 受験番号
+    + amount: `1` (string,required) - 受講料
+    + loan: `1` (string,required) - 教育ローン
+    + ipad: `1` (string,required) - iPad貸与
+    + deliveryCourse: `1` (string,optional) - 配信コース
+    + deliveryCourseStatus: `1` (string,optional) - 配信コースステータス
+    + lastName: `1` (string,required) - 姓
+    + firstName: `1` (string,required) - 名
+    + lastKana: `1` (string,required) - せい
+    + firstKana: `1` (string,required) - めい
+    + gender: `1` (string,required) - 性別
+    + zip: `1` (string,required) - 郵便番号
+    + prefectural: `1` (string,required) - 都道府県
+    + address1: `1` (string,required) - 市区町村
+    + address2: `1` (string,required) - 番地
+    + address3: `1` (string,optional) - 建物名・部屋番号
+    + tel: `1` (string,required) - 電話番号
+    + email: `toshiharu.tanaka@briswell.com` (string,required) - メールアドレス
+    + birthDate: `1` (string,required) - 生年月日
+    + university: `1` (string,required) - 大学名
+    + graduation: `1` (string,required) - 大学卒業年
+    + exam: `1` (string,required) - 国試受験
+    + booklet: `1` (string,optional) - 問題冊子
+    + marking: `1` (string,optional) - 採点サービス
+    + examNo: `1` (string,optional) - 麻布模試受験番号
+    + practiceApp: `1` (string,required) - 実践アプリ利用
+    + books: `1` (string,optional) - 登録書籍
+    + guarantorLastName: `1` (string,required) - 保証人姓
+    + guarantorFirstName: `1` (string,required) - 保証人名
+    + guarantorLastKana: `1` (string,required) - 保証人せい
+    + guarantorFirstKana: `1` (string,required) - 保証人めい
+    + guarantorAddress: `1` (string,required) - 保証人住所
+    + guarantorZip: `1` (string,optional) - 保証人郵便番号
+    + guarantorPrefectural: `1` (string,optional) - 保証人都道府県
+    + guarantorAddress1: `1` (string,optional) - 保証人市区町村
+    + guarantorAddress2: `1` (string,optional) - 保証人番地
+    + guarantorAddress3: `1` (string,optional) - 保証人建物名・部屋番号
+    + guarantorEmail: `1` (string,required) - 保証人メールアドレス
+    + shipping: `1` (string,required) - 発送物送付先
+    + shippingZip: `1` (string,optional) - 発送先郵便番号
+    + shippingPrefectural: `1` (string,optional) - 発送先都道府県
+    + shippingAddress1: `1` (string,optional) - 発送先市区町村
+    + shippingAddress2: `1` (string,optional) - 発送先番地
+    + shippingAddress3: `1` (string,optional) - 発送先建物名・部屋番号
+
++ Response 201 (application/json)
+    + Attributes (object)
+        + id: 1 (string,required) - id
