@@ -14,7 +14,7 @@
 ### Item list
 | No. | Name | View | Type | Required | Max Chara | Validation | Default | API1(Res) | API3(Res) | API2(Param) |
 | --- | ---- | ---- | ---- | -------- | --------- | ---------- | ------- | ------------ | ------------ | ------------ |
-| 1 | キャンセル | Y | button | - | - | - | - | - | - | - |
+| 1 | Cancel | Y | button | - | - | - | - | - | - | - |
 | 2 | 画像 | Y | image | - | - | - | Hiển thị hình mặc định trên Mock | - | - | imageFile |
 | 3 | ファイルを選択 | Y | file | - | - | - | - | - | - | - |
 | 3-1 | 画像を削除 | Y | button | - | - | - | - | - | - | - |
