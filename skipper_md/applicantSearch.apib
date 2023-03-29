@@ -1,0 +1,188 @@
+
+
+## applicantSearch [/v1/applicant]
+
+### applicantSearch [GET]
+
+#### Khái quát xử lý
+
+* 受け取った検索条件の結果をN件返却する <br>
+<br>
+Trả về N record
+* [id] の昇順 , [applicantCourse].[id] の昇順 で返却する <br>
+<br>
+* [Parameters].[course],[status],[paymentDateFrom],[paymentDateTo] <br>
+ [applicant].[applicantCourse] に1件でも存在すればHit対象とする <br>
+<br>
+* [Parameters].[specialFlag] <br>
+ [Parameters].[specialFlag] = 1:除外 の場合 <br>
+ [applicant].[applicantCourse].[specialFlag] = 1:Yes のデータが1件でも存在する場合、Hit対象外とする <br>
+ [Parameters].[specialFlag] = 2:特待のみ表示 の場合 <br>
+ [applicant].[applicantCourse].[specialFlag] = 1:Yes のデータが1件でも存在する場合、Hit対象とする <br>
+<br>
+* [Parameters].[receiveDateFrom],[receiveDateTo] <br>
+ [applicant].[applicantReceive].[receiveDate] に1件でも存在すればHit対象とする <br>
+<br>
+* [Parameters].[doneFlag] <br>
+ [applicant].[applicantContact].[doneFlag] != 1:済 データが1件でも存在すればHit対象とする <br>
+<br>
+Param
+* [Parameters].[azbStudent] <br>
+ [Parameters].[azbStudent] = 1:再受講生 → [applicant].[azbStudent] = 1:はい をHit対象とする <br>
+ [Parameters].[azbStudent] = 2:再受講生ではない → [applicant].[azbStudent] = 2:いいえ をHit対象とする <br>
+<br>
+* [Parameters].[openingDay] <br>
+ [Parameters].[openingDay] = 1:未出荷 → [applicant].[openingDayShippingDate] = NULL をHit対象とする <br>
+ [Parameters].[openingDay] = 2:出荷済 → [applicant].[openingDayShippingDate] != NULL をHit対象とする <br>
+<br>
+* [Parameters].[test] <br>
+ [Parameters].[test] = 1:未出荷 → [applicant].[exam] = 2:未受験 OR ( [applicant].[exam] = 1:受験した AND [applicant].[booklet] = 2:持っていない ) AND [applicant].[testShippingDate] = NULL をHit対象とする <br>
+ [Parameters].[test] = 2:出荷済 → [applicant].[testShippingDate] != NULL をHit対象とする <br>
+ [Parameters].[test] = 3:対象外 → [applicant].[exam] = 1:受験した AND [applicant].[booklet] = 1:持っている をHit対象とする <br>
+<br>
+* [Parameters].[markSheet] <br>
+ [Parameters].[markSheet] = 1:未出荷 → [applicant].[exam] = 2:未受験 OR ( [applicant].[exam] = 1:受験した AND [applicant].[marking] = ( 2:利用していない OR 3:分からない ) ) AND [applicant].[markSheetShippingDate] = NULL をHit対象とする <br>
+ [Parameters].[markSheet] = 2:出荷済 → [applicant].[markSheetShippingDate] != NULL をHit対象とする <br>
+ [Parameters].[markSheet] = 3:対象外 → [applicant].[exam] = 1:受験した AND [applicant].[marking] = 1:利用した をHit対象とする <br>
+<br>
+document
+* [Parameters].[document] <br>
+ [Parameters].[document] = 1:未出荷 → [applicant].[applicantCourse].[courseId] = 4 が存在する AND [status] = 1:本入会 OR 2:仮入会 AND [applicant].[documentShippingDate] = NULL の[applicant] をHit対象とする <br>
+ [Parameters].[document] = 2:出荷済 → [applicant].[documentShippingDate] != NULL をHit対象とする <br>
+ [Parameters].[document] = 3:対象外 → [applicant].[applicantCourse].[courseId] = 4 が存在しない OR [courseId] = 4 の[status] = 3:キャンセル待ち OR 4:キャンセル をHit対象とする <br>
+<br>
+* [Parameters].[basic] <br>
+ [Parameters].[basic] = 1:未出荷 → [applicant].[applicantCourse].[courseId] = 4 が存在する AND [status] = 1:本入会 OR 2:仮入会 AND [applicant].[basicShippingDate] = NULL の[applicant] をHit対象とする <br>
+ [Parameters].[basic] = 2:出荷済 → [applicant].[basicShippingDate] != NULL をHit対象とする <br>
+ [Parameters].[basic] = 3:対象外 → [applicant].[applicantCourse].[courseId] = 4 が存在しない OR [courseId] = 4 の[status] = 3:キャンセル待ち OR 4:キャンセル をHit対象とする <br>
+<br>
+* [Parameters].[ipad] <br>
+ [Parameters].[ipad] = 1:未出荷 → [applicant].[applicantCourse].[courseId] = 4 が存在する AND [status] = 1:本入会 OR 2:仮入会 AND [applicant].[ipad] = 1:希望する AND [applicant].[ipadShippingDate] = NULL の[applicant] をHit対象とする <br>
+ [Parameters].[ipad] = 2:出荷済 → [applicant].[ipadShippingDate] != NULL をHit対象とする <br>
+ [Parameters].[ipad] = 3:対象外 → [applicant].[applicantCourse].[courseId] = 4 が存在しない OR [courseId] = 4 の[status] = 3:キャンセル待ち OR 4:キャンセル OR [applicant].[ipad] = 2:希望しない をHit対象とする <br>
+<br>
+* [Parameters].[receiveStatus] <br>
+ 1:入金未了 → [applicant].[receiveFlag] != 1:Yes をHit対象とする <br>
+ 2:入金済 → [applicant].[receiveFlag] = 1:Yes をHit対象とする <br>
+<br>
+* [Response].[applicantContactNotCompleteFlag] <br>
+ [applicant].[applicantContact].[doneFlag] != 1:済 が1件でも存在する場合 `Yes` で返却する <br>
+<br>
+* [Response].[receiveDate] <br>
+ [applicant].[applicantReceive].[receiveDate] のうち、一番未来日を返却 <br>
+<br>
+* [Response].[receiveAmount] <br>
+ [applicant].[applicantReceive].[receiveAmount] の合計金額を返却 <br>
+<br>
+
++ Parameters
+    + id: `1` (string,optional) - 申込者id（完全一致）（カンマ区切りで複数選択可能）
+    + name: `田中` (string,optional) - 申込者名（lastName,firstName,lastKana,firstKana,lastName+firstName,lastKana+firstKana をLIKE検索）
+    + guarantorName: `田中` (string,optional) - 保証人名（guarantorLastName,guarantorFirstName,guarantorLastKana,guarantorFirstKana,guarantorLastName+guarantorFirstName,guarantorLastKana+guarantorFirstKana をLIKE検索）
+    + email: `tanaka` (string,optional) - 申込者メールアドレス（LIKE検索）
+    + createdAtFrom: `2020-01-01` (string,optional) - 申込日From
+    + createdAtTo: `2020-01-01` (string,optional) - 申込日To
+    + course: `1` (string,optional) - コース
+    + specialFlag: `1` (string,optional) - 特待
+    + comment: `1` (string,optional) - 特記事項（LIKE検索）
+    + status: `1,2` (string,optional) - ステータス
+    + doneFlag: `1` (string,optional) - 対応済フラグ
+    + receiveStatus: `1,2` (string,optional) - 入金ステータス
+    + paymentDateFrom: `2020-01-01` (string,optional) - 入金締切日From
+    + paymentDateTo: `2020-01-01` (string,optional) - 入金締切日To
+    + receiveDateFrom: `2020-01-01` (string,optional) - 入金日From
+    + receiveDateTo: `2020-01-01` (string,optional) - 入金日To
+    + loan: `1` (string,optional) - 教育ローン
+    + loanUse: `1` (string,optional) - 教育ローン利用
+    + loanEx: `1` (string,optional) - 教育ローン審査結果
+    + university: `1` (string,optional) - 大学名
+    + azbStudent: `1` (string,optional) - 麻布受講生
+    + openingDay: `1` (string,optional) - 開講日案内
+    + test: `1` (string,optional) - 国家試験問題
+    + markSheet: `1` (string,optional) - マークシート出荷日
+    + document: `1` (string,optional) - 講義資料
+    + basic: `1` (string,optional) - ベーシック講座資料
+    + ipad: `1` (string,optional) - iPad
+
++ Response 200 (application/json)
+    + Headers
+        X-Total-Count: 2
+    + Attributes (array,required,fixed-type)
+        + (object)
+            + id: `1` (string,required) - id
+            + applicantCourse:  (array,required) - 申込者コース
+                + (object)
+                    + id: `1` (string,required) - id
+                    + course: `1` (object,required) - コース
+                        + id: `1` (string,required) - id
+                        + name: `1` (string,required) - コース名
+                    + cancelNo: `1` (string,optional) - キャンセル待ちNo
+                    + status: `1` (string,required) - ステータス
+                    + specialFlag: `1` (string,optional) - 特待フラグ
+                    + discount: `1` (string,optional) - 割引金額
+                    + amount: `1` (string,required) - 受講料
+                    + paymentDate: `1` (string,required) - 入金締切日
+            + azbStudent: `1` (string,required) - 麻布受講生
+            + studentNo: `1` (string,optional) - 受験番号
+            + loan: `1` (string,required) - 教育ローン
+            + loanUse: `1` (string,optional) - 教育ローン利用
+            + loanEx: `1` (string,optional) - 教育ローン審査結果
+            + ipad: `1` (string,required) - iPad貸与
+            + lastName: `1` (string,required) - 姓
+            + firstName: `1` (string,required) - 名
+            + lastKana: `1` (string,required) - せい
+            + firstKana: `1` (string,required) - めい
+            + gender: `1` (string,required) - 性別
+            + zip: `1` (string,required) - 郵便番号
+            + prefectural: `1` (string,required) - 都道府県
+            + address1: `1` (string,required) - 市区町村
+            + address2: `1` (string,required) - 番地
+            + address3: `1` (string,optional) - 建物名・部屋番号
+            + tel: `1` (string,required) - 電話番号
+            + email: `toshiharu.tanaka@briswell.com` (string,required) - メールアドレス
+            + birthDate: `1` (string,required) - 生年月日
+            + university: `1` (string,required) - 大学名
+            + graduation: `1` (string,required) - 大学卒業年
+            + exam: `1` (string,required) - 国試受験
+            + booklet: `1` (string,optional) - 問題冊子
+            + marking: `1` (string,optional) - 採点サービス
+            + examNo: `1` (string,optional) - 麻布模試受験番号
+            + practiceApp: `1` (string,required) - 実践アプリ利用
+            + books: `1` (string,optional) - 登録書籍
+            + guarantorLastName: `1` (string,required) - 保証人姓
+            + guarantorFirstName: `1` (string,required) - 保証人名
+            + guarantorLastKana: `1` (string,required) - 保証人せい
+            + guarantorFirstKana: `1` (string,required) - 保証人めい
+            + guarantorAddress: `1` (string,required) - 保証人住所
+            + guarantorZip: `1` (string,optional) - 保証人郵便番号
+            + guarantorPrefectural: `1` (string,optional) - 保証人都道府県
+            + guarantorAddress1: `1` (string,optional) - 保証人市区町村
+            + guarantorAddress2: `1` (string,optional) - 保証人番地
+            + guarantorAddress3: `1` (string,optional) - 保証人建物名・部屋番号
+            + guarantorTel: `1` (string,optional) - 保証人電話番号
+            + guarantorEmail: `1` (string,optional) - 保証人メールアドレス
+            + shipping: `1` (string,required) - 発送物送付先
+            + shippingZip: `1` (string,optional) - 発送先郵便番号
+            + shippingPrefectural: `1` (string,optional) - 発送先都道府県
+            + shippingAddress1: `1` (string,optional) - 発送先市区町村
+            + shippingAddress2: `1` (string,optional) - 発送先番地
+            + shippingAddress3: `1` (string,optional) - 発送先建物名・部屋番号
+            + comment: `1` (string,optional) - 特記事項
+            + openingDayShippingDate: `1` (string,optional) - 開校日案内出荷日
+            + testShippingDate: `1` (string,optional) - 国家試験問題出荷日
+            + markSheetShippingDate: `1` (string,optional) - マークシート出荷日
+            + documentShippingDate: `1` (string,optional) - 講義資料出荷日
+            + basicShippingDate: `1` (string,optional) - ベーシック講座資料出荷日
+            + ipadShippingDate: `1` (string,optional) - iPad出荷日
+            + fmDate: `1` (string,optional) - FM移行済日
+            + cancelFlag: `1` (string,optional) - キャンセルフラグ
+            + receiveFlag: `1` (string,optional) - 入金済フラグ
+            + createdAt: `2020-01-01 11:11:11` (string,required) - 登録日時
+            + createdBy: `1` (string,required) - 登録者
+            + createdUserName: `Tanaka` (string,required) - 登録者名
+            + updatedAt: `2020-01-01 11:11:11` (string,required) - 更新日時
+            + updatedBy: `1` (string,required) - 更新者
+            + updatedUserName: `Tanaka` (string,required) - 更新者名
+            + applicantContactNotCompleteFlag:  (string,optional) - 申込者お問合せ未対応
+            + receiveDate:  (string,optional) - 入金日
+            + receiveAmount:  (string,optional) - 入金金額
