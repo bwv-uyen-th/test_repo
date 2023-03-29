@@ -43,7 +43,7 @@ Disallow: /
 ※Tham khảo file [画面一覧] trên Google Drive
 
 ### Thiết kế màn hình
-※Tham chiếu màn hình Mock
+※Tham chiếu màn hình Mock html
 
 ### Header
 | No. | Tên hạng mục | Action | Spec | API(Res) | Ghi chú |
