@@ -17,6 +17,7 @@
         * Dựa trên thông tin SecretsManager, get các thông tin dưới đây từ SecretsManager
             * SESSION_SECRET
             * HASH_SECRET
+            add content
             * REDIS_HOST
             * REDIS_PORT
 ### Trình duyệt
