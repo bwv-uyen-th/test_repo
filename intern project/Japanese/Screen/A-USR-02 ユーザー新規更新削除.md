@@ -35,7 +35,7 @@
 
 ### Quyền hạn
 
-| No. | 項目名 | 更新/表示 |
+| No. | 項目名 | Cho nhập/hiển thị |
 | - | - | - |
 | 2 | Email | 「Admin」の場合：更新<br/>それ以外の場合：表示 |
 | 3 | User Name | 「Admin」の場合：更新<br/>それ以外の場合：表示 |
@@ -46,7 +46,7 @@
 
 ### 初期表示
 
-| No. | 項目名 | 仕様 |
+| No. | 項目名 | Spec |
 | - | - | - |
 | - | 画面起動 | 1. GET Parameter:user_idがない場合、「userSearchId」APIを実行しない<br/>GET Parameter:user_idがある場合、「userSearchId」APIを実行し、id = GET Parameter:user_idで送信<br/>　失敗した場合<br/>　　APIから返却されたエラーメッセージを表示<br/>　成功した場合<br/>　　APIから返却されたデータを入力フォームに反映<br/><br/>2. 「sectionSearch」APIを実行し、sort = 2、deleted = 0で送信<br/>　失敗した場合<br/>　　APIから返却されたエラーメッセージを表示<br/>　成功した場合<br/>　　APIから返却されたデータを「Section」項目のリスト値とする<br/>　　section.idをkey値、section.nameをvalue値とする |
 | - | 画面タイトル | GET Parameter:user_idがない場合、「User Register」と表示<br/>GET Parameter:user_idがある場合、「User Edit」と表示 |
