@@ -12,7 +12,7 @@
 
 ### 入力フォーム
 
-| No. | 項目名 | 更新/表示 | 部品種類 | 必須 | 文字数 | 入力制限 | デフォルト | 「sectionSearch」APIのレスポンス | 「userSearchId」APIのレスポンス | 「userCreate」/「userUpdate」APIのリクエスト |
+| No. | 項目名 | 更新/表示 | Type | 必須 | 文字数 | 入力制限 | デフォルト | 「sectionSearch」APIのレスポンス | 「userSearchId」APIのレスポンス | 「userCreate」/「userUpdate」APIのリクエスト |
 | - | - | - | - | - | - | - | - | - | - | - |
 | 1 | ID | 表示 | label | - | - | - | - | - | id | (id) |
 | 2 | Email | 表示/更新 | text | Y | 255 | メールアドレス | - | - | email | email |
