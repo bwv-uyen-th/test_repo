@@ -10,7 +10,7 @@
 ## Screen access privileges
 ※Tham chiếu file [画面一覧] trên Google Drive
 
-## Basic information
+## Basic information user-add
 ### Item list
 | No. | Name | View | Type | Required | Max Chara | Validation | Default | API1(Res) | API3(Res) | API2(Param) |
 | --- | ---- | ---- | ---- | -------- | --------- | ---------- | ------- | ------------ | ------------ | ------------ |
