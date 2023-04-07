@@ -46,7 +46,7 @@ Nothing
 
 ## Trigger processing content
 
-| No. | Name | Action | Content |
+| No. | Name | Action | Nội dung |
 | --- | ---- | ------ | ------- |
 | 1 | 一覧に戻る | Khi nhấn | Chuyển sang màn hình [S201-1_ユーザー検索]　|
 | 7 | 修正 | Khi nhấn | Chuyển sang màn hình [S201-4_ユーザー編集]　|
